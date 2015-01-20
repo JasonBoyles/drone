@@ -8,9 +8,14 @@ dependencies:
   - pip install git+https://github.com/JasonBoyles/bumper
 test:
   override:
-  - envshuffle hot test
+  - envshuffle hot test:
+      environment:
+        HOT_ARTIFACT_DIR: test/artifacts
 deployment:
   stable:
     branch: master
     commands:
     - bumper bump $CIRCLE_PROJECT_USERNAME $CIRCLE_PROJECT_REPONAME
+general:
+  artifacts:
+    - "test/artifacts"

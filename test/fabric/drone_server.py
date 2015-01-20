@@ -2,8 +2,11 @@
 
 import re
 
-from fabric.api import env, hide, run, task
+from fabric.api import env, hide, run, cd, get, task
 from envassert import detect, file, package, port, process, service
+
+artifact_files = [ 'cfn-userdata.log',
+                   'heat-script.log' ]
 
 
 def drone_is_responding():
@@ -28,3 +31,9 @@ def check():
     assert process.is_up("droned"), "The droned process is not running."
     assert service.is_enabled("drone"), "The drone service is not enabled."
     assert drone_is_responding(), "Drone is not responding."
+
+@task
+def collect_artifacts():
+  with cd("/root"):
+    for file in artifact_files:
+      get(file, 'test/artifacts')
